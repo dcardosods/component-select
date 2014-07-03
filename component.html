@@ -1,4 +1,4 @@
-<polymer-element name="ceci-select" extends="ceci-element" attributes="">
+<polymer-element name="ceci-select" extends="ceci-element" attributes="collection" collection="">
   <ceci-definition>
     {
       "name": "Select",
@@ -10,6 +10,10 @@
       "listeners": {
       },
       "attributes": {
+        "collection": {
+          "description": "Collection where the options are stored",
+          "label": "Collection"
+        }
       }
     }
   </ceci-definition>
@@ -40,12 +44,31 @@
     Polymer("ceci-select", {
       ready: function() {
         this.super();
+        this.collections = document.querySelector("ceci-collections");
+      },
+      collectionReady: function () {
+        var collection = this.collections.getCollection(this.collection);
+        collection.addField('selected', 'checkbox');
+        collection.addField('Option label', 'text');
+        collection.addField('Option value', "text");
+      },
+      collectionChanged: function() {
+        if (this.collection === '') {
+          return;
+        }
+        var collection = this.collections.getCollection(this.collection);
+        if (!collection) {
+          this.collections.addCollection(this.collection);
+        }
+        this.async(this.collectionReady);
       },
       closeHelp: function () {
         var toggleble = this.shadowRoot.querySelectorAll('.js-toggleble');
         [].slice.call(toggleble).forEach(function (el) {
           el.classList.toggle('u-hidden');
         });
+
+        this.collection = 'Select';
       }
     });
   </script>
