@@ -1,7 +1,7 @@
 <polymer-element name="ceci-select" extends="ceci-element" attributes="">
   <ceci-definition>
     {
-      "name": "select",
+      "name": "Select",
       "tags": "select,data,menu,options",
       "thumbnail": "./thumbnail.png",
       "description": "Presents a menu of options",
@@ -14,17 +14,39 @@
     }
   </ceci-definition>
   <template>
-    <link rel="stylesheet" href="component.css">
+    <!-- <link rel="stylesheet" href="component.css"> -->
+    <style>
+      :host .u-hidden {
+        display: none;
+      }
+
+      :host .Select-element {
+        width: 80%;
+      }
+    </style>
     <div class="Select">
-      <select class="Select-element"></select>
+      <div class="Select-help js-toggleble">
+        <h3>How to add options?</h3>
+        <p>The options of the menu are stored in a collection named "Select".</p>
+        <p>Each option has a label and its related value.</p>
+        <p>Edit these in the sidebar's App Data tab.</p>
+        <button on-click="{{closeHelp}}" type="button">I understand!</button>
+      </div>
+      <select class="Select-element u-hidden js-toggleble"></select>
     </div>
     <shadow></shadow>
   </template>
-    <script>
-      Polymer("ceci-select", {
-        ready: function() {
-          this.super();
-        }
-      });
-    </script>
+  <script>
+    Polymer("ceci-select", {
+      ready: function() {
+        this.super();
+      },
+      closeHelp: function () {
+        var toggleble = this.shadowRoot.querySelectorAll('.js-toggleble');
+        [].slice.call(toggleble).forEach(function (el) {
+          el.classList.toggle('u-hidden');
+        });
+      }
+    });
+  </script>
 </polymer-element>
