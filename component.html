@@ -30,7 +30,7 @@
         <p>Edit these in the sidebar's App Data tab.</p>
         <button on-click="{{closeHelp}}" type="button">I understand!</button>
       </div>
-      <select class="Select-element u-hidden js-toggle-visibility js-select">
+      <select class="Select-element u-hidden js-toggle-visibility" on-change="{{selectOption}}">
         <template repeat="{{option in options}}">
           <option value="{{option.value}}">{{option.value}}</option>
         </template>
@@ -44,11 +44,6 @@
         this.super();
         this.options = [];
         this.collections = document.querySelector('ceci-collections');
-
-        var self = this;
-        this.shadowRoot.querySelector('.js-select').addEventListener('change', function () {
-          self.broadcast('optionselected', this.value);
-        });
       },
       collectionReady: function () {
         var options = this.options;
@@ -75,6 +70,9 @@
           this.collections.addCollection(this.collection);
         }
         this.async(this.collectionReady);
+      },
+      selectOption: function (event, detail, sender) {
+        this.broadcast('optionselected', sender.value);
       },
       closeHelp: function () {
         var toggleble = this.shadowRoot.querySelectorAll('.js-toggle-visibility');
