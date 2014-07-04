@@ -1,4 +1,17 @@
 :host {
   display: block;
   width: 100%;
+  min-height: 28px;
+}
+
+:host .u-hidden {
+  display: none;
+}
+
+:host .Select {
+  min-height: inherit;
+}
+:host .Select-element {
+  width: 70%;
+  margin-left: 2.5%;
 }
