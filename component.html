@@ -6,6 +6,10 @@
       "thumbnail": "./thumbnail.png",
       "description": "Presents a menu of options",
       "broadcasts": {
+        "optionselected": {
+          "label": "Selected option",
+          "description": "Broadcasts the selected option."
+        }
       },
       "listeners": {
       },
@@ -20,28 +24,47 @@
   <template>
     <link rel="stylesheet" href="component.css">
     <div class="Select">
-      <div class="Select-help js-toggleble">
+      <div class="Select-help js-toggle-visibility">
         <h3>How to add options?</h3>
         <p>The options of the menu are stored in a collection named "Select".</p>
-        <p>Each option has a label and its related value.</p>
         <p>Edit these in the sidebar's App Data tab.</p>
         <button on-click="{{closeHelp}}" type="button">I understand!</button>
       </div>
-      <select class="Select-element u-hidden js-toggleble"></select>
+      <select class="Select-element u-hidden js-toggle-visibility js-select">
+        <template repeat="{{option in options}}">
+          <option value="{{option.value}}">{{option.value}}</option>
+        </template>
+      </select>
     </div>
     <shadow></shadow>
   </template>
   <script>
-    Polymer("ceci-select", {
+    Polymer('ceci-select', {
       ready: function() {
         this.super();
-        this.collections = document.querySelector("ceci-collections");
+        this.options = [];
+        this.collections = document.querySelector('ceci-collections');
+
+        var self = this;
+        this.shadowRoot.querySelector('.js-select').addEventListener('change', function () {
+          self.broadcast('optionselected', this.value);
+        });
       },
       collectionReady: function () {
+        var options = this.options;
         var collection = this.collections.getCollection(this.collection);
-        collection.addField('selected', 'checkbox');
-        collection.addField('Option label', 'text');
-        collection.addField('Option value', "text");
+        collection.addField('value', 'text');
+
+        this.onItemChange = function(e) {
+          var detail = e.detail;
+          if (detail.removed) {
+            options.splice(detail.index, 1);
+          }
+          if (detail.added) {
+            options.splice(detail.index, 0, detail.added);
+          }
+        };
+        collection.addEventListener('itemchange', this.onItemChange);
       },
       collectionChanged: function() {
         if (this.collection === '') {
@@ -54,7 +77,7 @@
         this.async(this.collectionReady);
       },
       closeHelp: function () {
-        var toggleble = this.shadowRoot.querySelectorAll('.js-toggleble');
+        var toggleble = this.shadowRoot.querySelectorAll('.js-toggle-visibility');
         [].slice.call(toggleble).forEach(function (el) {
           el.classList.toggle('u-hidden');
         });
