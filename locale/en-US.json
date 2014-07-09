@@ -1,4 +1,8 @@
 {
 	"ceci-select": "Select",
-	"ceci-select/description": "Presents a menu of options"
+	"ceci-select/description": "Presents a menu of options",
+  "ceci-select/attributes/collection/label": "Collection",
+  "ceci-select/attributes/collection/description": "Collection where the options are stored",
+  "ceci-select/attributes/firstOption/label": "First option",
+  "ceci-select/attributes/firstOption/description": "First option of the component"
 }
