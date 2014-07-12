@@ -46,6 +46,10 @@
   <script>
     Polymer('ceci-select', {
       ready: function() {
+        if (sessionStorage.getItem('ceci-select-component-helpShowed') === 'true') {
+          this.closeHelp();
+        }
+
         this.super();
 
         // Private attributes
@@ -88,6 +92,8 @@
         [].slice.call(toggleble).forEach(function (el) {
           el.classList.toggle('u-hidden');
         });
+
+        sessionStorage.setItem('ceci-select-component-helpShowed', 'true');
       }
     });
   </script>
