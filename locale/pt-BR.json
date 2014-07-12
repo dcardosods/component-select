@@ -1,0 +1,6 @@
+{
+  "ceci-select": "Seleção",
+  "ceci-select/description": "Apresenta um menu de opções",
+  "ceci-select/attributes/collection/label": "Coleção",
+  "ceci-select/attributes/collection/description": "Coleção onde as opções são armazenadas"
+}
