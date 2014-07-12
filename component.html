@@ -1,5 +1,5 @@
 <polymer-element name="ceci-select" extends="ceci-element"
-  attributes="collection firstOption" collection="" firstOption="Choose...">
+  attributes="collection" collection="Select">
   <ceci-definition>
     {
       "name": "Select",
@@ -18,10 +18,6 @@
         "collection": {
           "description": "Collection where the options are stored",
           "label": "Collection"
-        },
-        "firstOption": {
-          "description": "First option of the component",
-          "label": "First option"
         }
       }
     }
@@ -47,30 +43,18 @@
     Polymer('ceci-select', {
       ready: function() {
         this.super();
+
+        // Private attributes
         this.options = [];
         this.collections = document.querySelector('ceci-collections');
       },
       collectionReady: function () {
-        var options = this.options;
         var collection = this.collections.getCollection(this.collection);
-        collection.addField('value', 'text');
-
-        this.onItemChange = function(e) {
-          var detail = e.detail;
-          if (detail.removed) {
-            options.splice(detail.index, 1);
-          }
-          if (detail.added) {
-            options.splice(detail.index, 0, detail.added);
-          }
-        };
-        collection.addEventListener('itemchange', this.onItemChange);
-
-        if (this.firstOption) {
-          collection.addItem({
-            value: this.firstOption
-          });
+        if (!collection.getField('value')) {
+          collection.addField('value', 'text');
         }
+
+        this.options = collection.data;
       },
       collectionChanged: function() {
         if (this.collection === '') {
@@ -90,8 +74,6 @@
         [].slice.call(toggleble).forEach(function (el) {
           el.classList.toggle('u-hidden');
         });
-
-        this.collection = 'Select';
       }
     });
   </script>
