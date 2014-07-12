@@ -29,9 +29,10 @@
     <link rel="stylesheet" href="component.css">
     <div class="Select">
       <div class="Select-help js-toggle-visibility">
-        <h3>How to add options?</h3>
-        <p>The options of the menu are stored in a collection named "Select".</p>
+        <h3>How to manage the options?</h3>
+        <p>The menu's options are stored in a Collection.</p>
         <p>Edit these in the sidebar's App Data tab.</p>
+        <p>The default collection is "Select".</p>
         <button on-click="{{closeHelp}}" type="button">I understand!</button>
       </div>
       <select class="Select-element u-hidden js-toggle-visibility" on-change="{{selectOption}}">
@@ -58,6 +59,8 @@
         }
 
         this.options = collection.data;
+        this.ceciCollections.addEventListener('collectionchange', this.updateCollectionOptions.bind(this));
+        this.updateCollectionOptions();
       },
       collectionChanged: function() {
         if (this.collection === '') {
@@ -68,6 +71,14 @@
           this.ceciCollections.addCollection(this.collection);
         }
         this.async(this.collectionReady);
+      },
+      updateCollectionOptions: function () {
+        var collectionsNames = this.ceciCollections.getCollections().map(getName);
+        this.ceci.attributes.collection.options = collectionsNames;
+
+        function getName(collection) {
+          return collection.name;
+        }
       },
       selectOption: function (event, detail, sender) {
         this.broadcast('optionselected', sender.value);
