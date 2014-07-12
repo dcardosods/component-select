@@ -17,7 +17,10 @@
       "attributes": {
         "collection": {
           "description": "Collection where the options are stored",
-          "label": "Collection"
+          "label": "Collection",
+          "editable": "select",
+          "options": [],
+          "listener": true
         }
       }
     }
@@ -46,10 +49,10 @@
 
         // Private attributes
         this.options = [];
-        this.collections = document.querySelector('ceci-collections');
+        this.ceciCollections = document.querySelector('ceci-collections');
       },
       collectionReady: function () {
-        var collection = this.collections.getCollection(this.collection);
+        var collection = this.ceciCollections.getCollection(this.collection);
         if (!collection.getField('value')) {
           collection.addField('value', 'text');
         }
@@ -60,9 +63,9 @@
         if (this.collection === '') {
           return;
         }
-        var collection = this.collections.getCollection(this.collection);
+        var collection = this.ceciCollections.getCollection(this.collection);
         if (!collection) {
-          this.collections.addCollection(this.collection);
+          this.ceciCollections.addCollection(this.collection);
         }
         this.async(this.collectionReady);
       },
